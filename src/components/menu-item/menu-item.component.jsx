@@ -1,7 +1,6 @@
 import React from "react";
 import { useHistory, withRouter } from "react-router-dom";
 import "./menu-item.styles.scss";
-// import { useHistory } from "react-router";
 
 const MenuItem = ({ title, imageUrl, size, linkUrl, match }) => {
   const history = useHistory();
