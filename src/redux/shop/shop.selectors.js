@@ -19,7 +19,8 @@ export const selectCollections = createSelector(
 
 export const selectCollectionsForPreview = createSelector(
   [selectCollections],
-  (collections) => Object.keys(collections).map((key) => collections[key])
+  (collections) =>
+    collections ? Object.keys(collections).map((key) => collections[key]) : []
 );
 
 export const selectCollection = memoize((collectionUrlParam) =>
@@ -31,6 +32,6 @@ export const selectCollection = memoize((collectionUrlParam) =>
     //   )
     //   converted the shopdata into an object since searching for an element in an array takes a lot of time
 
-    (collections) => collections[collectionUrlParam]
+    (collections) => (collections ? collections[collectionUrlParam] : null)
   )
 );
