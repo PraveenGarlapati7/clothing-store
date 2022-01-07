@@ -8,12 +8,12 @@ import Header from "./components/header/header.component";
 import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
 import CheckoutPage from "./pages/checkout/checkout.component";
 
-import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
+// import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
 import { connect } from "react-redux";
-import { setCurrentUser } from "./redux/user/user.actions";
 import { selectCurrentUser } from "./redux/user/user.selectors";
 import { createStructuredSelector } from "reselect";
+import { checkUserSession } from "./redux/user/user.actions";
 
 class App extends React.Component {
   // constructor() {
@@ -25,22 +25,23 @@ class App extends React.Component {
   // }
 
   componentDidMount() {
-    this.unSubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
-      // createUserProfileDocument(user);
-      if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
-
-        userRef.onSnapshot((snapshot) => {
-          this.props.setCurrentUser({
-            id: snapshot.id,
-            ...snapshot.data(),
-          });
-          // console.log(this.state);
-        });
-      } else {
-        this.props.setCurrentUser(userAuth);
-      }
-    });
+    const { checkUserSession } = this.props;
+    checkUserSession();
+    // this.unSubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
+    //   // createUserProfileDocument(user);
+    //   if (userAuth) {
+    //     const userRef = await createUserProfileDocument(userAuth);
+    //     userRef.onSnapshot((snapshot) => {
+    //       this.props.setCurrentUser({
+    //         id: snapshot.id,
+    //         ...snapshot.data(),
+    //       });
+    //       // console.log(this.state);
+    //     });
+    //   } else {
+    //     this.props.setCurrentUser(userAuth);
+    //   }
+    // });
   }
 
   componentWillUnmount() {
@@ -82,7 +83,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  checkUserSession: () => dispatch(checkUserSession()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
